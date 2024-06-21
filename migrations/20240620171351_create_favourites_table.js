@@ -4,7 +4,7 @@
  */
 exports.up = function (knex) {
   return knex.schema.createTable("favorites", (table) => {
-    table.increments("id").primary();
+    table.increments("id");
     table
       .integer("user_id")
       .unsigned()

@@ -4,7 +4,7 @@
  */
 exports.up = function (knex) {
   return knex.schema.createTable("recipes", (table) => {
-    table.increments("id").primary();
+    table.increments("id");
     table.string("title").notNullable();
     table.json("ingredients").notNullable();
     table.text("instructions").notNullable();

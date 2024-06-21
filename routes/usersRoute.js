@@ -6,18 +6,23 @@ const jwt = require("jsonwebtoken");
 const router = express.Router();
 
 router.post("/signup", async (req, res) => {
-  const { username, password } = req.body;
+  const { username, email, password, avatar } = req.body;
 
-  const encripted = bcrypt.hashSync(password);
+  const encrypted = bcrypt.hashSync(password);
 
   try {
-    await knex("users").insert({ username, password: encripted });
+    await knex("users").insert({
+      username,
+      email,
+      password: encrypted,
+      avatar,
+    });
     res.status(201).json({ success: true });
   } catch (e) {
     console.log(e.code);
     switch (e.code) {
       case "ER_DUP_ENTRY":
-        res.status(400).send("username exists");
+        res.status(400).send("username or email already exists");
         break;
       case "ER_DATA_TOO_LONG":
         res.status(400).send("username too long (max 20 characters)");
