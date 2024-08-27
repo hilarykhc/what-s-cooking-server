@@ -34,20 +34,20 @@ router.post("/signup", async (req, res) => {
 });
 
 router.post("/login", async (req, res) => {
-  const { username, password } = req.body;
+  const { email, password } = req.body;
 
   try {
-    const user = await knex("users").where({ username }).first();
+    const user = await knex("users").where({ email }).first();
 
     if (!user) {
-      return res.status(400).send("user or password incorrect");
+      return res.status(400).send("email or password incorrect");
     }
 
     if (!bcrypt.compareSync(password, user.password)) {
-      return res.status(400).send("user or password incorrect");
+      return res.status(400).send("email or password incorrect");
     }
 
-    const token = jwt.sign({ username: user.username }, process.env.SECRET);
+    const token = jwt.sign({ email: user.email }, process.env.SECRET);
     res.json({ token });
   } catch (e) {
     res.status(401).send("login failed");
@@ -64,11 +64,11 @@ async function authorize(req, res, next) {
   const token = authorization.split(" ")[1];
 
   try {
-    const { username } = jwt.verify(token.process.env.SECRET);
+    const { email } = jwt.verify(token.process.env.SECRET);
 
     const user = await knex("users")
       .select("id", "username", "email", "avatar")
-      .where({ username })
+      .where({ email })
       .first();
     req.user = user;
 
