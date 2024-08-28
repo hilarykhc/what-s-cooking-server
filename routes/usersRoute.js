@@ -64,7 +64,7 @@ async function authorize(req, res, next) {
   const token = authorization.split(" ")[1];
 
   try {
-    const { email } = jwt.verify(token.process.env.SECRET);
+    const { email } = jwt.verify(token, process.env.SECRET);
 
     const user = await knex("users")
       .select("id", "username", "email", "avatar")
